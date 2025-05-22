@@ -113,45 +113,45 @@ namespace Rendeleskezelo
         {
             GenerateXML();
         }
-        public void GenerateXMLToFile(string filePath)
-        {
-            using (XmlWriter writer = XmlWriter.Create(filePath))
-            {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("Orders"); // Root element
+        //public void GenerateXMLToFile(string filePath)
+        //{
+        //    using (XmlWriter writer = XmlWriter.Create(filePath))
+        //    {
+        //        writer.WriteStartDocument();
+        //        writer.WriteStartElement("Orders"); // Root element
 
-                foreach (DataGridViewRow row in dataGridViewOrders.Rows)
-                {
-                    if (row.IsNewRow) continue;
+        //        foreach (DataGridViewRow row in dataGridViewOrders.Rows)
+        //        {
+        //            if (row.IsNewRow) continue;
 
-                    var cell = row.Cells["checkBox"].Value;
-                    bool isChecked = cell != null && Convert.ToBoolean(cell);
+        //            var cell = row.Cells["checkBox"].Value;
+        //            bool isChecked = cell != null && Convert.ToBoolean(cell);
 
-                    if (isChecked)
-                    {
-                        string orderID = row.Cells["orderIDDataGridViewTextBoxColumn"].Value?.ToString() ?? "";
-                        string customerName = row.Cells["customerNameDataGridViewTextBoxColumn"].Value?.ToString() ?? "";
-                        string orderDate = row.Cells["orderDateDataGridViewTextBoxColumn"].Value?.ToString() ?? "";
-                        string address = row.Cells["shippingAddressDataGridViewTextBoxColumn"].Value?.ToString() ?? "";
-                        string orderTotal = row.Cells["orderTotalDataGridViewTextBoxColumn"].Value?.ToString() ?? "";
+        //            if (isChecked)
+        //            {
+        //                string orderID = row.Cells["orderIDDataGridViewTextBoxColumn"].Value?.ToString() ?? "";
+        //                string customerName = row.Cells["customerNameDataGridViewTextBoxColumn"].Value?.ToString() ?? "";
+        //                string orderDate = row.Cells["orderDateDataGridViewTextBoxColumn"].Value?.ToString() ?? "";
+        //                string address = row.Cells["shippingAddressDataGridViewTextBoxColumn"].Value?.ToString() ?? "";
+        //                string orderTotal = row.Cells["orderTotalDataGridViewTextBoxColumn"].Value?.ToString() ?? "";
 
-                        writer.WriteStartElement("Order");
+        //                writer.WriteStartElement("Order");
 
-                        writer.WriteElementString("customerName", customerName);
-                        writer.WriteElementString("customerAddress", address);
-                        writer.WriteElementString("invoiceDeliveryDate", orderDate);
-                        writer.WriteElementString("productCodeValue", orderID);
-                        writer.WriteElementString("unitPrice", orderTotal);
-                        writer.WriteElementString("unitPriceHUF", orderTotal);
+        //                writer.WriteElementString("customerName", customerName);
+        //                writer.WriteElementString("customerAddress", address);
+        //                writer.WriteElementString("invoiceDeliveryDate", orderDate);
+        //                writer.WriteElementString("productCodeValue", orderID);
+        //                writer.WriteElementString("unitPrice", orderTotal);
+        //                writer.WriteElementString("unitPriceHUF", orderTotal);
 
-                        writer.WriteEndElement(); // </Order>
-                    }
-                }
+        //                writer.WriteEndElement(); // </Order>
+        //            }
+        //        }
 
-                writer.WriteEndElement(); // </Orders>
-                writer.WriteEndDocument();
-            }
-        }
+        //        writer.WriteEndElement(); // </Orders>
+        //        writer.WriteEndDocument();
+        //    }
+        //}
 
         public void GenerateXML()
         {
@@ -159,11 +159,21 @@ namespace Rendeleskezelo
             {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
+
                     // Save the file to the selected location
-                    using (XmlWriter writer = XmlWriter.Create(saveFileDialog.FileName))
+                    using (XmlWriter writer = XmlWriter.Create("Szamla.xml"))
                     {
                         writer.WriteStartDocument();
-                        writer.WriteStartElement("Orders"); // Root element
+                        writer.WriteComment("");
+                        writer.WriteStartElement("Orders");
+                        writer.WriteStartElement("invoiceMain");
+                        writer.WriteStartElement("invoice");
+                        writer.WriteStartElement("invoiceHead");
+                        writer.WriteStartElement("supplierInfo");
+                        writer.WriteStartElement("supplierTaxNumber");
+                        writer.WriteElementString("taxpayerId", "99999999");
+                        writer.WriteElementString("vatCode", "2");
+                        writer.WriteElementString("countyCode", "41");
 
                         foreach (DataGridViewRow row in dataGridViewOrders.Rows)
                         {
@@ -183,6 +193,8 @@ namespace Rendeleskezelo
                                 //MessageBox.Show($"kijelölt rendelés: {orderID}; {customerName}");
 
                                 // Write XML entry for each selected row
+
+                                writer.WriteComment("");
                                 writer.WriteStartElement("Order");
 
                                 writer.WriteElementString("customerName", customerName);
@@ -195,12 +207,13 @@ namespace Rendeleskezelo
                                 writer.WriteEndElement(); // </Order>
                             }
                         }
-
+                        
                         writer.WriteEndElement(); // </Orders>
                         writer.WriteEndDocument();
+                       
                     }
 
-                    MessageBox.Show("XML file saved successfully!");
+                    MessageBox.Show("XML sikeresen mentve: szamla.xml");
                 }
             }
 
