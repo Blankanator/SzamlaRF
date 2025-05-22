@@ -16,8 +16,19 @@ using System.Windows.Forms;
 
 namespace Rendeleskezeles
 {
+    public class ProductDTO
+    {
+        public string ProductName { get; set; }
+    }
     public partial class ProductsForm : Form
     {
+        public static List<ProductDTO> FilterProducts(List<ProductDTO> allProducts, string filterText)
+        {
+            return allProducts
+                .Where(p => p.ProductName.ToLower().Contains(filterText.ToLower()))
+                .ToList();
+        }
+
         List<string> items = new List<string>();
         List<int> quantity = new List<int>();
         string orderId = string.Empty;
@@ -31,8 +42,8 @@ namespace Rendeleskezeles
 
         private static Api ApiHivas()
         {
-            string url = "http://rendfejl10001.northeurope.cloudapp.azure.com:8080";
-            string kulcs = "1-7d286e89-c54f-430f-906e-f4ec7847b883"; // <-- Ide tedd a saját API kulcsodat
+            string url = "http://rendfejl1016.northeurope.cloudapp.azure.com:8080";
+            string kulcs = "1-9b1353c9-35ee-49e6-bfd2-cde51b368def";
             Api proxy = new Api(url, kulcs);
             return proxy;
         }
